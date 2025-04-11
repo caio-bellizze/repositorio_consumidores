@@ -355,7 +355,7 @@ try:
         st.write("### 🏭 Detalhamento por Unidade")
         st.dataframe(tabela_unidades, hide_index=True)
 
-    pass:
+    pass
 except Exception as e:
     st.error("❌ Um erro ocorreu ao carregar o app:")
     st.code(traceback.format_exc())
