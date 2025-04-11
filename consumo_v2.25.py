@@ -10,10 +10,6 @@ import traceback
 
 try:
 
-    st.write("Status code:", response.status_code)
-    st.write("Resposta bruta:")
-    st.text(response.text)
-
     st.title("📊 Análise de Consumo de Energia")
     
     # URLs das APIs
