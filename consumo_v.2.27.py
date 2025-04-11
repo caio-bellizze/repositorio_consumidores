@@ -21,44 +21,53 @@ try:
     
     @st.cache_data(show_spinner=True)
     def carregar_dados(url, ano, max_requests=50, max_retries=5, max_empty_responses=3):
-        all_records = []
-        limit = 10000
-        offset = 0
-        request_count = 0
-        empty_responses = 0
+            all_records = []
+            limit = 10000
+            offset = 0
+            request_count = 0
+            empty_responses = 0
         
-        with st.spinner(f"Carregando dados de {ano}..."):
-            while request_count < max_requests:
-                retries = 0
-                while retries < max_retries:
-                    try:
-                        response = requests.get(f"{url}&limit={limit}&offset={offset}", timeout=30)
-                        response.raise_for_status()
-                        data = response.json()
-                        records = data.get("result", {}).get("records", [])
-                        
-                        if not records:
-                            empty_responses += 1
-                            if empty_responses >= max_empty_responses:
-                                break
-                        else:
-                            empty_responses = 0
-                            all_records.extend(records)
-                            offset += limit
-                            request_count += 1
+            with st.spinner(f"Carregando dados de {ano}..."):
+                while request_count < max_requests:
+                    retries = 0
+                    while retries < max_retries:
+                        try:
+                            full_url = f"{url}&limit={limit}&offset={offset}"
+                            st.write(f"🔄 Requisição {request_count+1} (tentativa {retries+1}): {full_url}")
+                            
+                            response = requests.get(full_url, timeout=30)
+                            response.raise_for_status()
+                            data = response.json()
+                            records = data.get("result", {}).get("records", [])
+        
+                            if not records:
+                                empty_responses += 1
+                                st.warning(f"⚠️ Resposta vazia (#{empty_responses}) em {full_url}")
+                                if empty_responses >= max_empty_responses:
+                                    st.warning("🚫 Máximo de respostas vazias atingido.")
+                                    break
+                            else:
+                                empty_responses = 0
+                                all_records.extend(records)
+                                offset += limit
+                                request_count += 1
+                                st.success(f"✅ {len(records)} registros carregados")
+                            break
+        
+                        except requests.exceptions.RequestException as e:
+                            retries += 1
+                            st.error(f"❌ Erro na requisição (tentativa {retries}): {e}")
+                            st.code(traceback.format_exc())
+                            time.sleep(5)
+                    if empty_responses >= max_empty_responses:
                         break
-                    except requests.exceptions.RequestException:
-                        retries += 1
-                        time.sleep(5)
-                if empty_responses >= max_empty_responses:
-                    break
+        
+            df = pd.DataFrame(all_records)
+        
+            if "MES_REFERENCIA" in df.columns:
+                df["MES_REFERENCIA"] = df["MES_REFERENCIA"].astype(str)
+                df["MES_REFERENCIA"] = df["MES_REFERENCIA"].apply(lambda x: f"01/{x[4:6]}/{x[:4]}")
     
-        df = pd.DataFrame(all_records)
-        
-        if "MES_REFERENCIA" in df.columns:
-            df["MES_REFERENCIA"] = df["MES_REFERENCIA"].astype(str)
-            df["MES_REFERENCIA"] = df["MES_REFERENCIA"].apply(lambda x: f"01/{x[4:6]}/{x[:4]}")
-        
         return df
     
     @st.cache_data(show_spinner=True)
