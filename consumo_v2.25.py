@@ -6,6 +6,9 @@ import requests
 import time
 from calendar import monthrange
 import re
+import traceback
+
+try:
 
 st.set_page_config(layout="wide")
 st.title("📊 Análise de Consumo de Energia")
@@ -352,3 +355,11 @@ if st.button("Gerar Gráfico") and empresas_selecionadas:
 
     st.write("### 🏭 Detalhamento por Unidade")
     st.dataframe(tabela_unidades, hide_index=True)
+
+    pass  # apenas um placeholder
+except Exception as e:
+    st.error("❌ Um erro ocorreu ao carregar o app:")
+    st.code(traceback.format_exc())
+
+
+    
