@@ -17,7 +17,7 @@ resource_id_2025 = "c88d04a6-fe42-413b-b7bf-86e390494fb0"
 base_url_2024 = f"https://dadosabertos.ccee.org.br/api/3/action/datastore_search?resource_id={resource_id_2024}"
 base_url_2025 = f"https://dadosabertos.ccee.org.br/api/3/action/datastore_search?resource_id={resource_id_2025}"
 
-@st.cache_data(show_spinner=True)
+@st.cache_data(ttl=3600, show_spinner=True)
 def carregar_dados(url, ano, max_requests=50, max_retries=5, max_empty_responses=3):
     all_records = []
     limit = 10000
@@ -59,7 +59,7 @@ def carregar_dados(url, ano, max_requests=50, max_retries=5, max_empty_responses
     
     return df
 
-@st.cache_data(show_spinner=True)
+@st.cache_data(ttl=3600, show_spinner=True)
 def carregar_excel(nome_arquivo, ano):
     df = pd.read_excel(nome_arquivo)
     if "MES_REFERENCIA" in df.columns:
