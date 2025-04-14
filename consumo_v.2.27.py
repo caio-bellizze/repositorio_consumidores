@@ -77,10 +77,9 @@ df_2024_api = df_2024_api[df_2024_api["MES_REFERENCIA"].dt.month != 4]
 df_xlsx_2024 = carregar_excel("base_de_dados_nacional_2024.xlsx", 2024)
 df_2024 = pd.concat([df_xlsx_2024, df_2024_api], ignore_index=True)
 df_xlsx_2023 = carregar_excel("base_de_dados_nacional_2023.xlsx", 2023)
-df_xlsx_2022 = carregar_excel("base_de_dados_nacional_2022.xlsx", 2022)
 
 # Consolidar tudo
-df_total = pd.concat([df_xlsx_2022, df_xlsx_2023, df_2024, df_2025], ignore_index=True)
+df_total = pd.concat([df_xlsx_2023, df_2024, df_2025], ignore_index=True)
 df_total["MES_REFERENCIA"] = pd.to_datetime(df_total["MES_REFERENCIA"], format="%d/%m/%Y")
 df_total_ord = df_total.sort_values(by="MES_REFERENCIA", ascending=False)
 
@@ -108,7 +107,7 @@ empresas_selecionadas = st.multiselect(
     placeholder="Selecione as empresas desejadas"
 )
 
-data_inicio = st.date_input("Data inicial", value=pd.to_datetime("2022-01-01"))
+data_inicio = st.date_input("Data inicial", value=pd.to_datetime("2023-01-01"))
 data_fim_default = df_total_ord["MES_REFERENCIA"].max().date()
 data_fim = st.date_input("Data final", value=data_fim_default)
 
