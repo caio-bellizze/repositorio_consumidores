@@ -76,9 +76,10 @@ df_2024_api = df_2024_api[df_2024_api["MES_REFERENCIA"].dt.month != 4]
 
 df_xlsx_2024 = carregar_excel("base_de_dados_nacional_2024.xlsx", 2024)
 df_2024 = pd.concat([df_xlsx_2024, df_2024_api], ignore_index=True)
+df_xlsx_2023 = carregar_excel("base_de_dados_nacional_2023.xlsx", 2023)
 
 # Consolidar tudo
-df_total = pd.concat([df_2024, df_2025], ignore_index=True)
+df_total = pd.concat([df_xlsx_2023, df_2024, df_2025], ignore_index=True)
 df_total["MES_REFERENCIA"] = pd.to_datetime(df_total["MES_REFERENCIA"], format="%d/%m/%Y")
 df_total_ord = df_total.sort_values(by="MES_REFERENCIA", ascending=False)
 
