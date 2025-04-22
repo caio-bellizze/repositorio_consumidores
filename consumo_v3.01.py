@@ -107,7 +107,7 @@ empresas_selecionadas = st.multiselect(
     placeholder="Selecione as empresas desejadas"
 )
 
-data_inicio = st.date_input("Data inicial", value=pd.to_datetime("2024-01-01"))
+data_inicio = st.date_input("Data inicial", value=pd.to_datetime("2023-01-01"))
 data_fim_default = df_total_ord["MES_REFERENCIA"].max().date()
 data_fim = st.date_input("Data final", value=data_fim_default)
 
