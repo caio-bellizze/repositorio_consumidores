@@ -96,8 +96,6 @@ mes_mais_antigo = df_total_ord["MES_REFERENCIA"].min().strftime("%m/%Y")
 mes_mais_recente = df_total_ord["MES_REFERENCIA"].max().strftime("%m/%Y")
 st.success(f"Base de Dados Atualizada ({mes_mais_antigo} até {mes_mais_recente})")
 
-st.write(f"Base completa tem {df_total_ord.shape[0]} registros.")
-
 # --- Inputs
 empresas_disponiveis = sorted(df_total_ord["NOME_EMPRESARIAL"].unique())
 empresas_selecionadas = st.multiselect(
